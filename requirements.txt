@@ -1,0 +1,2 @@
+fastapi==0.75.0
+alembic==1.7.7
