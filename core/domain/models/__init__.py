@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 
 from infrastructure.database import Base
 
+
 class Source(Base):
     __tablename__ = "source"
 
@@ -18,7 +19,7 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     source_id = Column(Integer(), ForeignKey(Source.id))
-    
+
     source = relationship('Source', foreign_keys='Post.source_id')
 
 
@@ -41,3 +42,8 @@ class Subscription(Base):
 
     user = relationship('User', back_populates='sources')
     source = relationship('Source', back_populates='users')
+
+
+class Token(Base):
+    __tablename__ = 'token'
+    user_id = Column(ForeignKey('user.id'), primary_key=True)
