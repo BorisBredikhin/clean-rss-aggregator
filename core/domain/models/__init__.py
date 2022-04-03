@@ -38,6 +38,7 @@ class Subscription(Base):
 
     user_id = Column(ForeignKey('user.id'), primary_key=True)
     source_id = Column(ForeignKey('source.id'), primary_key=True)
+    label = Column(String)
     subscribed_at = Column(DateTime)
 
     user = relationship('User', back_populates='sources')

@@ -5,3 +5,4 @@ SQLAlchemy~=1.4.32
 pydantic~=1.9.0
 starlette~=0.17.1
 python-multipart==0.0.5
+beautifulsoup4==4.10.0
