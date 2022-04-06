@@ -63,7 +63,7 @@ class SourceRepository:
             subscriptions = session.execute(
                     select(Subscription).where(Subscription.user_id==user.id)
             ).all()
-            return subscriptions
+            return [s.Subscription.source for s in subscriptions]
 
 class PostRepository:
     @staticmethod

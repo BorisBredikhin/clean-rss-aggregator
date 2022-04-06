@@ -17,13 +17,13 @@ router = APIRouter(
 
 @router.post('/register')
 async def register(data: RegistrationSchema):
-    user = UserRepository.create(data.nickname, hashlib.sha1(data.password).hexdigest())
+    user = UserRepository.create(data.nickname, hashlib.sha1(data.password.encode('utf-8')).hexdigest())
     return Response()
 
 
 @router.post('/token')
 async def login(data: OAuth2PasswordRequestForm = Depends()):
-    user = UserRepository.login(data.username, hashlib.sha1(data.password).hexdigest())
+    user = UserRepository.login(data.username, hashlib.sha1(data.password.encode('utf-8')).hexdigest())
     if user is None:
         return Response("wrong credentials", HTTP_401_UNAUTHORIZED)
     return {"access_token": get_token(user), "token_type": "bearer"}

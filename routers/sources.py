@@ -21,6 +21,7 @@ async def add(data: AddSourceSchema, current_user: User = Depends(get_current_us
     SourceRepository.subscribe(current_user, source, data.label)
     return Response(status_code=201)
 
-@router.get('/', response_model=list[PostSchema])
+
+@router.get('/', response_model=list[AddSourceSchema])
 async def list(current_user: User = Depends(get_current_user)):
     return SourceRepository.get_subscriptions(current_user)
