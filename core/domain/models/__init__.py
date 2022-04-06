@@ -19,6 +19,9 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     source_id = Column(Integer(), ForeignKey(Source.id))
+    title = Column(String)
+    pub_date = Column(DateTime)
+    link = Column(String)
 
     source = relationship('Source', foreign_keys='Post.source_id')
 

@@ -1,10 +1,12 @@
 import datetime
 from typing import Optional
 
+from bs4 import BeautifulSoup
+import requests
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from core.domain.models import User, Source, Subscription
+from core.domain.models import User, Source, Subscription, Post
 from infrastructure.database import engine, SessionLocal
 
 
@@ -53,3 +55,32 @@ class SourceRepository:
             )
             session.add(subscription)
             session.commit()
+            return subscription
+
+    @staticmethod
+    def get_subscriptions(user: User) -> list[Subscription]:
+        with SessionLocal() as session:
+            subscriptions = session.execute(
+                    select(Subscription).where(Subscription.user_id==user.id)
+            ).all()
+            return subscriptions
+
+class PostRepository:
+    @staticmethod
+    def get_posts(source: Source) -> list[Post]:
+        url = source.url
+        data = requests.get(url).content
+        soup = BeautifulSoup(data)
+        posts = soup.find_all('item')
+        result = []
+        with SessionLocal() as session:
+            for post in posts:
+                 db_post = Post()
+                 db_post.source = source
+                 db_post.title = post.find_next('title').text
+                 db_post.link = post.find_next('link').text
+                 db_post.pub_date = post.find_next('pubDate').text
+                 session.add(db_post)
+            session.commit()
+            result.append(post)
+        return result
